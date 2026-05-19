@@ -1,0 +1,48 @@
+{
+    "name": "@wocker/prompts",
+    "type": "commonjs",
+    "version": "1.0.0",
+    "author": "Kris Papercut <krispcut@gmail.com>",
+    "description": "CLI prompts for wocker",
+    "license": "MIT",
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
+    "keywords": [
+        "wocker"
+    ],
+    "homepage": "https://github.com/kearisp/wocker-prompts#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kearisp/wocker-prompts.git"
+    },
+    "bugs": {
+        "url": "https://github.com/kearisp/wocker-prompts/issues"
+    },
+    "scripts": {
+        "prepublishOnly": "npm run build",
+        "start": "npm run watch",
+        "build": "tsc --project tsconfig.build.json",
+        "watch": "tsc -w --project tsconfig.build.json",
+        "test-watch": "jest --colors --watchAll",
+        "test": "jest --colors",
+        "make-coverage-badge": "make-coverage-badge"
+    },
+    "dependencies": {
+        "@inquirer/core": "^10.3.2",
+        "ansi-escapes": "^4.3.2",
+        "yoctocolors-cjs": "^2.1.3"
+    },
+    "devDependencies": {
+        "@inquirer/testing": "^2.1.53",
+        "@inquirer/type": "^3.0.10",
+        "@types/jest": "^30.0.0",
+        "@types/mute-stream": "^0.0.4",
+        "@types/node": "^24.12.2",
+        "jest": "^30.4.2",
+        "make-coverage-badge": "^1.2.0",
+        "mute-stream": "^2.0.0",
+        "ts-jest": "^29.4.9",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    }
+}
