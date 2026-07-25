@@ -98,6 +98,15 @@ const path = await promptPath({
 });
 ```
 
+By default the real `fs` module is used. Pass `fs` (anything with `existsSync`, `statSync` and `readdirSync`, e.g. `memfs`) to browse another file system:
+
+```typescript
+const path = await promptPath({
+    message: "Select file",
+    fs: myFs
+});
+```
+
 ## Validation
 
 All prompts support common validation rules:

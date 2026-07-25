@@ -19,6 +19,7 @@ import FS, {Stats} from "fs";
 import Path from "path";
 import {PromptConfig} from "./types/PromptConfig";
 import {Theme} from "./types/Theme";
+import {PromptFileSystem} from "./types/PromptFileSystem";
 import {validatePrompt} from "./validation/validatePrompt";
 import {prepareMessage} from "./tools/prepareMessage";
 import {prepareValue} from "./tools/prepareValue";
@@ -29,6 +30,7 @@ type Config = PromptConfig<string, {
     basePath?: string;
     filter?: "file" | "directory" | ((path: string, stat: Stats) => boolean);
     showHidden?: boolean;
+    fs?: PromptFileSystem;
 }>;
 
 export const promptPath = createPrompt<string, Config>((config: Config, done: (value: string) => void) => {
@@ -36,6 +38,7 @@ export const promptPath = createPrompt<string, Config>((config: Config, done: (v
         message = "Enter path",
         basePath = process.cwd(),
         showHidden = false,
+        fs = FS,
         filter,
         default: defaultValue = ""
     } = config;
@@ -57,7 +60,7 @@ export const promptPath = createPrompt<string, Config>((config: Config, done: (v
             : basePath;
 
         try {
-            const stat = FS.statSync(fullPath);
+            const stat = fs.statSync(fullPath);
 
             if(stat.isDirectory()) {
                 return ["", fullPath];
@@ -71,11 +74,11 @@ export const promptPath = createPrompt<string, Config>((config: Config, done: (v
     }, [inputValue]);
     const suggestions = useMemo((): string[] => {
         try {
-            if(!FS.existsSync(currentDir)) {
+            if(!fs.existsSync(currentDir)) {
                 return [];
             }
 
-            return FS.readdirSync(currentDir)
+            return fs.readdirSync(currentDir)
                 .filter((file) => {
                     if(!showHidden && file.startsWith("."))
                         return false;
@@ -84,7 +87,7 @@ export const promptPath = createPrompt<string, Config>((config: Config, done: (v
                         return false;
 
                     const filePath = Path.join(currentDir, file);
-                    const stats = FS.statSync(filePath);
+                    const stats = fs.statSync(filePath);
 
                     if(typeof filter === "function") {
                         return filter(filePath, stats);
@@ -101,8 +104,8 @@ export const promptPath = createPrompt<string, Config>((config: Config, done: (v
                 .sort((a, b) => {
                     const aPath = Path.join(currentDir, a),
                           bPath = Path.join(currentDir, b),
-                          aIsDir = FS.statSync(aPath).isDirectory(),
-                          bIsDir = FS.statSync(bPath).isDirectory();
+                          aIsDir = fs.statSync(aPath).isDirectory(),
+                          bIsDir = fs.statSync(bPath).isDirectory();
 
                     if(aIsDir && !bIsDir)
                         return -1;
@@ -168,7 +171,7 @@ export const promptPath = createPrompt<string, Config>((config: Config, done: (v
             ? newPath
             : Path.relative(basePath, newPath);
 
-        const stats = FS.statSync(newPath);
+        const stats = fs.statSync(newPath);
         const finalPath = stats.isDirectory()
             ? relativePath + Path.sep
             : relativePath;

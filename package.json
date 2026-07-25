@@ -1,7 +1,7 @@
 {
     "name": "@wocker/prompts",
     "type": "commonjs",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Kris Papercut <krispcut@gmail.com>",
     "description": "CLI prompts for wocker",
     "license": "MIT",
