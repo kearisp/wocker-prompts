@@ -2,12 +2,15 @@ import {describe, it, beforeEach, expect, jest} from "@jest/globals";
 import {render} from "@inquirer/testing";
 import FS from "fs";
 import {promptPath} from "./promptPath";
+import {PromptFileSystem} from "./types/PromptFileSystem";
 
-
-jest.mock("fs");
 
 describe("promptPath", (): void => {
-    const mockFS = FS as jest.Mocked<typeof FS>;
+    const mockFS = {
+        existsSync: jest.fn<PromptFileSystem["existsSync"]>(),
+        readdirSync: jest.fn<PromptFileSystem["readdirSync"]>(),
+        statSync: jest.fn<PromptFileSystem["statSync"]>()
+    };
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -22,6 +25,7 @@ describe("promptPath", (): void => {
         } as FS.Stats);
 
         const {answer, events, getScreen} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter file path"
         });
 
@@ -42,6 +46,7 @@ describe("promptPath", (): void => {
         } as FS.Stats);
 
         const {events, getScreen} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter file path"
         });
 
@@ -62,6 +67,7 @@ describe("promptPath", (): void => {
         } as FS.Stats);
 
         const {answer, events, getScreen} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter file path"
         });
 
@@ -84,6 +90,7 @@ describe("promptPath", (): void => {
         } as FS.Stats);
 
         const {events, getScreen} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter file path"
         });
 
@@ -104,6 +111,7 @@ describe("promptPath", (): void => {
         } as FS.Stats);
 
         const {answer, events} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter directory path"
         });
 
@@ -127,6 +135,7 @@ describe("promptPath", (): void => {
         });
 
         const {events, getScreen} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter file path",
             filter: "directory"
         });
@@ -148,6 +157,7 @@ describe("promptPath", (): void => {
         } as FS.Stats);
 
         const {events, getScreen} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter file path"
         });
 
@@ -168,6 +178,7 @@ describe("promptPath", (): void => {
         } as FS.Stats);
 
         const {events, getScreen} = await render(promptPath, {
+            fs: mockFS,
             message: "Enter file path",
             showHidden: true
         });
