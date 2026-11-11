@@ -1,7 +1,7 @@
 {
     "name": "@wocker/prompts",
     "type": "commonjs",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Kris Papercut <krispcut@gmail.com>",
     "description": "CLI prompts for wocker",
     "license": "MIT",
@@ -30,6 +30,7 @@
     "dependencies": {
         "@inquirer/core": "^10.3.2",
         "ansi-escapes": "^4.3.2",
+        "cli-table3": "^0.6.5",
         "yoctocolors-cjs": "^2.1.3"
     },
     "devDependencies": {
