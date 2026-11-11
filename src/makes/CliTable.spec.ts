@@ -99,6 +99,55 @@ describe("CliTable", () => {
         expect(table.toString()).not.toContain("undefined");
     });
 
+    it("should format a cell with the column format function", () => {
+        const table = new CliTable<{key: string; value: number}>({
+            ...plain,
+            headers: [
+                {label: "KEY", name: "key"},
+                {label: "VALUE", name: "value", format: (value) => `${value.toFixed(1)}ms`}
+            ]
+        });
+
+        table.push({key: "A", value: 5});
+
+        const output = table.toString();
+
+        expect(output).toContain("5.0ms");
+        expect(output).not.toContain("5.0ms5");
+    });
+
+    it("should pass the whole row to the format function", () => {
+        const table = new CliTable<{key: string; hidden: boolean}>({
+            ...plain,
+            headers: [
+                {label: "KEY", name: "key", format: (value, row) => row.hidden ? "***" : String(value)},
+                {label: "HIDDEN", name: "hidden"}
+            ]
+        });
+
+        table.push({key: "secret", hidden: true}, {key: "open", hidden: false});
+
+        const output = table.toString();
+
+        expect(output).toContain("***");
+        expect(output).not.toContain("secret");
+        expect(output).toContain("open");
+    });
+
+    it("should call format for a missing value", () => {
+        const table = new CliTable<{key: string; value?: string}>({
+            ...plain,
+            headers: [
+                {label: "KEY", name: "key"},
+                {label: "VALUE", name: "value", format: (value) => value ?? "-"}
+            ]
+        });
+
+        table.push({key: "A"});
+
+        expect(table.toString()).toContain("-");
+    });
+
     it("should throw on an unknown column", () => {
         const table = new CliTable({
             headers: [{label: "KEY", name: "key"}]

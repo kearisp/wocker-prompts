@@ -8,7 +8,10 @@ export class CliTable<T extends object = Record<string, string>> {
     protected visible: CliTable.Column<T>[] | undefined;
 
     public constructor(options: CliTable.Options<T>) {
-        const {headers, ...tableOptions} = options;
+        const {
+            headers,
+            ...tableOptions
+        } = options;
 
         this.columns = [...headers];
         this.options = tableOptions;
@@ -50,6 +53,10 @@ export class CliTable<T extends object = Record<string, string>> {
             table.push(columns.map((column) => {
                 const value = row[column.name];
 
+                if(column.format) {
+                    return (column.format as CliTable.Format<T>)(value, row);
+                }
+
                 return value === undefined || value === null ? "" : String(value);
             }));
         }
@@ -61,10 +68,15 @@ export class CliTable<T extends object = Record<string, string>> {
 export namespace CliTable {
     export type ColumnName<T> = keyof T & string;
 
+    export type Format<T, K extends ColumnName<T> = ColumnName<T>> = (value: T[K], row: T) => string;
+
     export type Column<T> = {
-        label: string;
-        name: ColumnName<T>;
-    };
+        [K in ColumnName<T>]: {
+            label: string;
+            name: K;
+            format?: Format<T, K>;
+        };
+    }[ColumnName<T>];
 
     export type TableOptions = Omit<Table.TableConstructorOptions, "head">;
 
