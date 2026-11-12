@@ -1,3 +1,4 @@
+export * from "./makes/CliTable";
 export * from "./promptConfirm";
 export * from "./promptInput";
 export * from "./promptPath";
