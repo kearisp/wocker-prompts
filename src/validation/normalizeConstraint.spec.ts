@@ -1,20 +1,20 @@
 import {describe, it, expect} from "@jest/globals";
-import {normalizeRule} from "./normalizeRule";
+import {normalizeConstraint} from "./normalizeConstraint";
 import {ValidationValue} from "../types/ValidationValue";
 import {ValidationValueMessage} from "../types/ValidationValueMessage";
 
 
-describe("normalizeRule", () => {
+describe("normalizeConstraint", () => {
     it.each<[ValidationValue]>([
         [undefined as unknown as ValidationValue],
         [null as unknown as ValidationValue],
         [true],
         [1],
         ["eet"]
-    ])("should return value", (rule) => {
-        const [value, message] = normalizeRule(rule);
+    ])("should return value", (constraint) => {
+        const [value, message] = normalizeConstraint(constraint);
 
-        expect(value).toEqual(rule);
+        expect(value).toEqual(constraint);
         expect(message).toBeUndefined();
     });
 
@@ -22,10 +22,10 @@ describe("normalizeRule", () => {
         [{message: "Test boolean", value: true}],
         [{message: "Test number", value: 1}],
         [{message: "Test string", value: "value"}]
-    ])("should normalize validation value with message", (rule) => {
-        const [value, message] = normalizeRule(rule);
+    ])("should normalize validation value with message", (constraint) => {
+        const [value, message] = normalizeConstraint(constraint);
 
-        expect(rule.message).toEqual(message);
-        expect(rule.value).toEqual(value);
+        expect(constraint.message).toEqual(message);
+        expect(constraint.value).toEqual(value);
     });
 });

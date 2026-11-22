@@ -21,7 +21,7 @@ import {prepareHelp} from "./tools/prepareHelp";
 
 
 type InputValue = string | number;
-type ValueType<T extends Config["type"] = "text"> =
+type ValueType<T extends PromptInputConfig["type"] = "text"> =
     T extends "string" | "text" | "password"
         ? string
         : T extends "int" | "number"
@@ -30,7 +30,7 @@ type ValueType<T extends Config["type"] = "text"> =
 
 type PromptFn = <
     V extends ValueType<C["type"]>,
-    C extends Config<V> = Config<V>
+    C extends PromptInputConfig<V> = PromptInputConfig<V>
 >(
     config: C,
     context?: Context
@@ -38,7 +38,7 @@ type PromptFn = <
     cancel: () => void;
 };
 
-type Config<V extends InputValue = InputValue> = PromptConfig<V, {
+export type PromptInputConfig<V extends InputValue = InputValue> = PromptConfig<V, {
     type?: "text" | "password" | "number";
     step?: number;
     prefix?: string;
@@ -47,10 +47,10 @@ type Config<V extends InputValue = InputValue> = PromptConfig<V, {
 
 export const promptInput = createPrompt<
     InputValue,
-    Config
+    PromptInputConfig
 >(<
     V extends ValueType<C["type"]>,
-    C extends Config<V> = Config<V>
+    C extends PromptInputConfig<V> = PromptInputConfig<V>
 >(config: C, done: (value: V) => void) => {
     const {
         message = "Input",
@@ -265,5 +265,3 @@ export const promptInput = createPrompt<
         ].join("")
     ];
 }) as PromptFn;
-
-export {Config as PromptInputConfig};
