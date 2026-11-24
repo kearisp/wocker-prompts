@@ -1,8 +1,8 @@
-import {Validation} from "../types/Validation";
+import {ValidationRule} from "../types/ValidationRule";
 import {messages} from "../messages";
 
 
-export const validateVolume: Validation<unknown> = (value) => {
+export const validateVolume: ValidationRule<unknown> = (value) => {
     if(typeof value === "undefined" || value === null || value === "") {
         return true;
     }

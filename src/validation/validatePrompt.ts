@@ -1,6 +1,6 @@
-import {normalizeRule} from "./normalizeRule";
+import {normalizeConstraint} from "./normalizeConstraint";
 import {PromptValidationConfig} from "../types/PromptValidationConfig";
-import {Validation} from "../types/Validation";
+import {ValidationRule} from "../types/ValidationRule";
 import {ValidationError} from "../types/ValidationError";
 import {messages} from "../messages";
 
@@ -37,7 +37,7 @@ export const validatePrompt = async <T = unknown>(
         };
     }
 
-    const [minValue, minMessage] = normalizeRule(min);
+    const [minValue, minMessage] = normalizeConstraint(min);
 
     if(!isEmpty && typeof minValue !== "undefined") {
         if(typeof value === "number" && value < minValue) {
@@ -48,7 +48,7 @@ export const validatePrompt = async <T = unknown>(
         }
     }
 
-    const [maxValue, maxMessage] = normalizeRule(max);
+    const [maxValue, maxMessage] = normalizeConstraint(max);
 
     if(!isEmpty && typeof maxValue !== "undefined") {
         if(typeof value === "number" && value > maxValue) {
@@ -59,7 +59,7 @@ export const validatePrompt = async <T = unknown>(
         }
     }
 
-    const [minLengthValue, minLengthMessage] = normalizeRule(minLength);
+    const [minLengthValue, minLengthMessage] = normalizeConstraint(minLength);
 
     if(!isEmpty && typeof minLengthValue !== "undefined") {
         const validateValue = typeof value === "number"
@@ -84,7 +84,7 @@ export const validatePrompt = async <T = unknown>(
     const [
         maxLengthValue,
         maxLengthMessage = ""
-    ] = normalizeRule(maxLength);
+    ] = normalizeConstraint(maxLength);
 
     if(!isEmpty && typeof maxLengthValue === "number") {
         const validateValue = typeof value === "number"
@@ -107,7 +107,7 @@ export const validatePrompt = async <T = unknown>(
     }
 
     if(validate) {
-        const rules: Record<string, Validation<any>> = typeof validate === "function"
+        const rules: Record<string, ValidationRule<any>> = typeof validate === "function"
             ? {validate}
             : validate;
 

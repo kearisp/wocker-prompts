@@ -1,7 +1,4 @@
-import {ValidationValue} from "./ValidationValue";
-import {ValidationValueMessage} from "./ValidationValueMessage";
+import {ValidationResult} from "./ValidationResult";
 
 
-export type ValidationRule<
-    T extends ValidationValue = ValidationValue
-> = T | ValidationValueMessage<T>;
+export type ValidationRule<T> = (value: T) => ValidationResult | Promise<ValidationResult>;
